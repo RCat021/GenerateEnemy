@@ -11,11 +11,13 @@ public class EnemyMover : MonoBehaviour
         transform.Translate(_direction * _speed * Time.deltaTime);
     }
 
-    public void SetMovementDirection()
+    public void SetMovementDirection(Vector3 direction)
     {
-        _direction = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
+        _direction = direction;
+    }
 
-        if (_direction.Equals(Vector3.zero))
-            _direction = Vector3.forward;
+    public void RotateToDirection()
+    {
+        transform.rotation = Quaternion.LookRotation(_direction);
     }
 }

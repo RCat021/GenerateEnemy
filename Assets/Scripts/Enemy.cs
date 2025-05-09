@@ -19,7 +19,6 @@ public class Enemy : MonoBehaviour
     private void OnEnable()
     {
         StartCoroutine(Destroy());
-        _mover.SetMovementDirection();
     }
 
     private IEnumerator Destroy()
@@ -28,4 +27,8 @@ public class Enemy : MonoBehaviour
         yield return new WaitForSeconds(_timeLife);
         Destroing?.Invoke(this);
     }
+
+    public void SetMovementDirection(Vector3 direction) => _mover.SetMovementDirection(direction);
+
+    public void RotateToDirection() => _mover.RotateToDirection();
 }

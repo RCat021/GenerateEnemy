@@ -13,34 +13,34 @@ public class EnemyPool : MonoBehaviour
     {
         _pool = new ObjectPool<Enemy>(
            createFunc: () => Instantiate(_prefab),
-           actionOnGet: ActivateCapsule,
-           actionOnRelease: DiactivedCapsule,
-           actionOnDestroy: DestroyCapsule,
+           actionOnGet: ActivateEnemy,
+           actionOnRelease: DiactivedEnemy,
+           actionOnDestroy: DestroyEnemy,
            collectionCheck: true,
            defaultCapacity: _capacity,
            maxSize: _maxSize
             );
     }
 
-    private void ActivateCapsule(Enemy enemy)
+    private void ActivateEnemy(Enemy enemy)
     {
-        enemy.Destroing += ReleaseCapsule;
+        enemy.Destroing += ReleaseEnemy;
         enemy.gameObject.SetActive(true);
     }
 
-    private void DiactivedCapsule(Enemy enemy)
+    private void DiactivedEnemy(Enemy enemy)
     {
         enemy.gameObject.SetActive(false);
     }
 
-    private void DestroyCapsule(Enemy enemy)
+    private void DestroyEnemy(Enemy enemy)
     {
-        Destroy(enemy);
+        Destroy(enemy.gameObject);
     }
 
-    private void ReleaseCapsule(Enemy enemy)
+    private void ReleaseEnemy(Enemy enemy)
     {
-        enemy.Destroing -= ReleaseCapsule;
+        enemy.Destroing -= ReleaseEnemy;
         _pool.Release(enemy);
     }
 
