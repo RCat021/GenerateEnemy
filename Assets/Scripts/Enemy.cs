@@ -7,9 +7,9 @@ public class Enemy : MonoBehaviour
 {
     [SerializeField] private float _timeLife = 5f;
 
-    public event Action<Enemy> Destroing;
-
     private EnemyMover _mover;
+
+    public event Action<Enemy> Destroed;
 
     private void Awake()
     {
@@ -21,14 +21,16 @@ public class Enemy : MonoBehaviour
         StartCoroutine(Destroy());
     }
 
+    public void SetMovementDirection(Vector3 direction) =>
+        _mover.SetMovementDirection(direction);
+
+    public void RotateToDirection() => 
+        _mover.RotateToDirection();
+
     private IEnumerator Destroy()
     {
         Debug.Log("Enum");
         yield return new WaitForSeconds(_timeLife);
-        Destroing?.Invoke(this);
+        Destroed?.Invoke(this);
     }
-
-    public void SetMovementDirection(Vector3 direction) => _mover.SetMovementDirection(direction);
-
-    public void RotateToDirection() => _mover.RotateToDirection();
 }

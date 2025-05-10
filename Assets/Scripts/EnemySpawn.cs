@@ -16,11 +16,11 @@ public class EnemySpawn : MonoBehaviour
     private void Spawn()
     {
         var enemy = _pool.GetEnemy();
-        EnemySpawnPosition enemySpawnPosition = GetRandomSpawnInfo();
 
+        EnemySpawnPosition enemySpawnPosition = GetRandomSpawnInfo();
         enemy.transform.position = enemySpawnPosition.GetSpawnPosition();
-        enemy.SetMovementDirection(GetRandomDirection());
-        enemy.RotateToDirection();
+
+        InitEnemyDirection(enemy);
     }
 
     private EnemySpawnPosition GetRandomSpawnInfo()
@@ -49,5 +49,11 @@ public class EnemySpawn : MonoBehaviour
             direction = Vector3.forward;
 
         return direction;
+    }
+
+    private void InitEnemyDirection(Enemy enemy)
+    {
+        enemy.SetMovementDirection(GetRandomDirection());
+        enemy.RotateToDirection();
     }
 }

@@ -24,7 +24,7 @@ public class EnemyPool : MonoBehaviour
 
     private void ActivateEnemy(Enemy enemy)
     {
-        enemy.Destroing += ReleaseEnemy;
+        enemy.Destroed += ReleaseEnemy;
         enemy.gameObject.SetActive(true);
     }
 
@@ -40,7 +40,7 @@ public class EnemyPool : MonoBehaviour
 
     private void ReleaseEnemy(Enemy enemy)
     {
-        enemy.Destroing -= ReleaseEnemy;
+        enemy.Destroed -= ReleaseEnemy;
         _pool.Release(enemy);
     }
 
