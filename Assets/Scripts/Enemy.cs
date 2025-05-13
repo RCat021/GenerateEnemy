@@ -1,5 +1,7 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 [RequireComponent(typeof(EnemyMover))]
@@ -18,18 +20,24 @@ public class Enemy : MonoBehaviour
 
     private void OnEnable()
     {
+        _mover.PathCompleted += OnReachedFinalPoint;
+    }
+
+    private void OnDisable()
+    {
+        _mover.PathCompleted -= OnReachedFinalPoint;
+    }
+
+    public void MoveToPoints(List<Vector3> points) =>
+        _mover.SetPath(points);
+
+    private void OnReachedFinalPoint()
+    {
         StartCoroutine(Destroy());
     }
 
-    public void SetMovementDirection(Vector3 direction) =>
-        _mover.SetMovementDirection(direction);
-
-    public void RotateToDirection() => 
-        _mover.RotateToDirection();
-
     private IEnumerator Destroy()
     {
-        Debug.Log("Enum");
         yield return new WaitForSeconds(_timeLife);
         Destroed?.Invoke(this);
     }

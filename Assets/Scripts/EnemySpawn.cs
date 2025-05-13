@@ -20,13 +20,16 @@ public class EnemySpawn : MonoBehaviour
         EnemySpawnPosition enemySpawnPosition = GetRandomSpawnInfo();
         enemy.transform.position = enemySpawnPosition.GetSpawnPosition();
 
-        InitEnemyDirection(enemy);
+        InitEnemyDirection(enemy, enemySpawnPosition.GetWaypoints());
     }
 
     private EnemySpawnPosition GetRandomSpawnInfo()
     {
         return _spawnInfo[Random.Range(0, _spawnInfo.Count)];
     }
+
+    private void InitEnemyDirection(Enemy enemy, List<Vector3> points) =>
+     enemy.MoveToPoints(points);
 
     private IEnumerator SpawnRoutine()
     {
@@ -39,21 +42,5 @@ public class EnemySpawn : MonoBehaviour
 
             yield return time;
         }
-    }
-
-    private Vector3 GetRandomDirection()
-    {
-        Vector3 direction = new Vector3(Random.Range(-1f, 1f), 0, Random.Range(-1f, 1f)).normalized;
-
-        if (direction.Equals(Vector3.zero))
-            direction = Vector3.forward;
-
-        return direction;
-    }
-
-    private void InitEnemyDirection(Enemy enemy)
-    {
-        enemy.SetMovementDirection(GetRandomDirection());
-        enemy.RotateToDirection();
     }
 }

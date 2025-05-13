@@ -1,23 +1,67 @@
+using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemyMover : MonoBehaviour
 {
     [SerializeField] private float _speed = 7f;
 
-    private Vector3 _direction;
+    private List<Vector3> _waypoints;
+    private int _currentWaypointIndex = 0;
+
+    private Vector3 _currentTarget;
+    private bool _isPathComplete = true;
+
+    public event Action PathCompleted;
+
+    public void SetPath(List<Vector3> waypoints)
+    {
+        _waypoints = waypoints;
+        _currentWaypointIndex = 0;
+        _isPathComplete = false;
+
+        if (_waypoints.Count > 0)
+        {
+            _currentTarget = _waypoints[0];
+            UpdateRotation();
+        }
+    }
 
     private void Update()
     {
-        transform.Translate(_direction * _speed * Time.deltaTime);
+        if (_isPathComplete)
+            return;
+
+        MoveToTarget();
+        CheckTargetReached();
     }
 
-    public void SetMovementDirection(Vector3 direction)
+    private void MoveToTarget()
     {
-        _direction = direction;
+        transform.position = Vector3.MoveTowards(transform.position, _currentTarget, _speed * Time.deltaTime);
     }
 
-    public void RotateToDirection()
+    private void CheckTargetReached()
     {
-        transform.rotation = Quaternion.LookRotation(_direction);
+        if (Vector3.Distance(transform.position, _currentTarget) < 0.1f)
+        {
+            _currentWaypointIndex++;
+
+            if (_currentWaypointIndex >= _waypoints.Count)
+            {
+                _isPathComplete = true;
+                PathCompleted?.Invoke();
+                return;
+            }
+
+            _currentTarget = _waypoints[_currentWaypointIndex];
+            UpdateRotation();
+        }
+    }
+
+    private void UpdateRotation()
+    {
+        Vector3 direction = (_currentTarget - transform.position).normalized;
+        transform.rotation = Quaternion.LookRotation(direction);
     }
 }
