@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class HeroSpawner : Spawner<Hero>
 {
-    [SerializeField] HeroPool _heroPool;
+    [SerializeField] private HeroPool _heroPool;
 
-    [SerializeField] List<HeroSpawnPosition> _spawnPosition;
+    [SerializeField] private List<HeroSpawnPosition> _spawnPosition;
 
-    public event Action<Hero> OnSpawn;
+    public event Action<Hero> OnSpawned;
 
     private void Start()
     {
@@ -17,22 +17,23 @@ public class HeroSpawner : Spawner<Hero>
 
     override protected void Spawn()
     {
-        Hero hero = _heroPool.GetHero();
+        Hero hero;
+        HeroSpawnPosition spawnPosition;
 
-        var spawnPosition = GetRandomSpawnPosition();
-        hero.transform.position = spawnPosition.GetSpawnPosition();
+        for (int i = 0; i < _spawnPosition.Count; i++)
+        {
+            hero = _heroPool.GetHero();
 
-        InitHeroDirection(hero, spawnPosition.GetWaypoints());
-        OnSpawn?.Invoke(hero);
+            spawnPosition = _spawnPosition[i];
+            hero.transform.position = spawnPosition.GetSpawnPosition();
+
+            InitHeroDirection(hero, spawnPosition.GetWaypoints());
+            OnSpawned?.Invoke(hero);
+        }
     }
 
     private void InitHeroDirection(Hero hero, List<Vector3> points)
     {
         hero.MoveToWaypoints(points);
-    }
-
-    private HeroSpawnPosition GetRandomSpawnPosition()
-    {
-        return _spawnPosition[UnityEngine.Random.Range(0, _spawnPosition.Count)];
     }
 }

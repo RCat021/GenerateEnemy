@@ -9,7 +9,7 @@ public abstract class Mover : MonoBehaviour
 
     public event Action PathCompleted;
 
-    public void SethPat(Vector3 waypoint)
+    public void SetPath(Vector3 waypoint)
     {
         _currentTarget = waypoint;
 

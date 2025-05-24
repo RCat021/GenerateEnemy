@@ -1,17 +1,13 @@
 
+using System.Collections.Generic;
 using UnityEngine;
 
 public class EnemySpawn : Spawner<Enemy>
 {
-    [SerializeField] EnemyPool _enemyPool;
-
+    [SerializeField] private EnemyPool _enemyPool;
     [SerializeField] EnemySpawnPosition _enemySpawnPosition;
-    private Transform _heroPosition = null;
 
-    private void Start()
-    {
-        StartCoroutine(SpawnRoutine());
-    }
+    private Transform _heroPosition = null;
 
     public void SetHeroPosition(Transform heroPosition) =>
         _heroPosition = heroPosition;
@@ -25,6 +21,11 @@ public class EnemySpawn : Spawner<Enemy>
         enemy.transform.position = _enemySpawnPosition.GetSpawnPosition();
 
         InitEnemyDirection(enemy, _heroPosition);
+    }
+
+    public void StartSpawn()
+    {
+        StartCoroutine(SpawnRoutine());
     }
 
     protected void InitEnemyDirection(Enemy enemy, Transform heoroPosition) =>

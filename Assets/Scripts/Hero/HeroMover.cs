@@ -21,7 +21,7 @@ public class HeroMover : Mover
 
             _currentTarget = _waypoints[_currentIndex];
 
-            SethPat(_currentTarget);
+            SetPath(_currentTarget);
         }
 
         MoveToTarget();
@@ -33,7 +33,7 @@ public class HeroMover : Mover
 
         _currentTarget = _waypoints[0];
 
-        SethPat(_currentTarget);
+        SetPath(_currentTarget);
     }
 
     private bool GetTargetReached()

@@ -6,7 +6,7 @@ public class EnemyMover : Mover
 
     private void Update()
     {
-        SethPat(_heroPosition.position);
+        SetPath(_heroPosition.position);
         MoveToTarget();
     }
 

@@ -1,22 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class WarriorSpawner : MonoBehaviour
 {
     [SerializeField] private HeroSpawner _heroSpawn;
-    [SerializeField] private EnemySpawn _enemySpawn;
+    [SerializeField] private List<EnemySpawn> _enemySpawns;
+
+    private int _targetEnemySpawnIndex = -1;
 
     private Transform _lastHeroPosition;
 
     private void OnEnable()
     {
-        _heroSpawn.OnSpawn += SetEnemyChaseTarget;
+        _heroSpawn.OnSpawned += SetEnemyChaseTarget;
     }
 
     private void OnDisable()
     {
-        _heroSpawn.OnSpawn -= SetEnemyChaseTarget;
+        _heroSpawn.OnSpawned -= SetEnemyChaseTarget;
     }
 
     private void SetEnemyChaseTarget(Hero hero)
@@ -25,7 +26,20 @@ public class WarriorSpawner : MonoBehaviour
 
         _lastHeroPosition = position;
 
-        _enemySpawn.SetHeroPosition(_lastHeroPosition);
+        var enemySpawn = _enemySpawns[GetTargetIndex()];
+
+        enemySpawn.SetHeroPosition(_lastHeroPosition);
+        enemySpawn.StartSpawn();
+    }
+
+    private int GetTargetIndex()
+    {
+        _targetEnemySpawnIndex++;
+
+        if(_targetEnemySpawnIndex >= _enemySpawns.Count)
+            _targetEnemySpawnIndex = 0;
+
+        return _targetEnemySpawnIndex;
     }
 
 }
